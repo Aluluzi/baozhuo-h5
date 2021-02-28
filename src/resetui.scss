@@ -1,0 +1,363 @@
+.van-field__control::placeholder {
+  color: #ccc !important;
+}
+
+a {
+  color: inherit;
+}
+
+p,
+img,
+a {
+  margin: 0;
+  padding: 0;
+}
+
+.main {
+  //[class*=van-hairline]:after {
+  //	position: absolute;
+  //	box-sizing: border-box;
+  //	content: " ";
+  //	pointer-events: none;
+  //	top: -50%;
+  //	right: -50%;
+  //	bottom: -50%;
+  //	left: -50%;
+  //	border-bottom: 2px solid #ebedf0;
+  //	-webkit-transform: scale(.5);
+  //	transform: scale(.5);
+  //}
+}
+
+.buy {
+  .van-search {
+    padding: 30px;
+  }
+}
+
+.register,
+.orderConfirm,
+.orderDetail {
+  .van-field__label {
+    width: 220px !important;
+    font-size: 32px;
+    color: #333333;
+    letter-spacing: 0;
+  }
+
+  //.van-cell {
+  //  font-size: 32px;
+  //  padding: 30px 31px;
+  //}
+
+  .van-button--primary {
+    /*color: #fff;*/
+    background-color: #fff;
+    border: 1px solid transparent;
+
+    font-size: 28px;
+    color: #ff8540;
+    letter-spacing: 0;
+    text-align: center;
+  }
+
+  //.van-cell--clickable {
+  //  .van-cell__title {
+  //    flex: none;
+  //    width: 220px;
+  //  }
+  //
+  //  .van-cell__value {
+  //    text-align: left;
+  //    font-size: 32px;
+  //    color: #cccccc;
+  //    letter-spacing: 0;
+  //  }
+  //}
+}
+
+.testItemDetail {
+  .van-swipe__indicators {
+    bottom: 40px;
+  }
+
+  .van-swipe__indicator {
+    width: 16px;
+    height: 16px;
+    margin-right: 16px;
+  }
+
+  .van-swipe__indicator--active {
+    width: 16px;
+    height: 16px;
+    margin-right: 16px;
+    background: #000;
+  }
+
+  .van-grid-item__content {
+    padding: 0 10px 10px;
+  }
+}
+
+.Income {
+  .van-popup--center {
+    border-radius: 10px;
+    .van-popup__close-icon--top-right {
+      top: 24px;
+      right: 24px;
+      font-size: 30px;
+      .van-icon__image {
+        width: 30px;
+        height: 30px;
+      }
+    }
+  }
+}
+.van-step--vertical.van-step--process .van-icon {
+  top: 0;
+  left: 0;
+  line-height: 2;
+  font-size: 32px;
+}
+
+.van-step--vertical .van-step__circle {
+  top: 32px;
+  left: -38px;
+}
+
+.van-step__circle {
+  display: block;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: #969799;
+}
+
+.van-step__title {
+  padding-top: 6px;
+}
+
+.van-step--process .van-step__title {
+  padding-top: 2px;
+  font-weight: bold;
+}
+
+.van-step__circle {
+  background-color: #e6e6e6;
+}
+
+.pickerAddress,
+.orderConfirm {
+  .picker-border {
+    padding-left: 0 !important;
+  }
+}
+
+.store {
+  .van-list__finished-text {
+    color: rgba(255, 255, 255, 0.6) !important;
+  }
+}
+/******************************************************/
+//下单
+.getOrder{
+  .van-tabs__nav--card{
+    margin: 0;
+    height: 108px;
+    background-color: #fff;
+    padding: 24px 0;
+    border: none;
+    box-sizing: border-box;
+  }
+  .van-tabs--card>.van-tabs__wrap{
+    height: 108px;
+  }
+  .van-tab{
+    border: 1px solid transparent!important;
+    margin-left: 24px;
+    height: 56px;
+  }
+  .van-tab--active{
+    border: 1px solid #21AEC3!important;
+  }
+
+  .van-sidebar{
+    width: 226px;
+  }
+  .van-sidebar-item {
+    border: none;
+    background: #f5f5f5;
+    min-height: 104px;
+    width: 226px;
+    color: #333;
+    font-size: 24px;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    padding: 0 32px;
+    box-sizing: border-box;
+    .van-sidebar-item__text {
+      width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      line-height: 32px;
+    }
+  }
+  .van-sidebar-item--select {
+    position: relative;
+    font-weight: bold;
+    background: linear-gradient(90deg, rgba(33, 174, 195, 0) 0%, rgba(33, 174, 195, 0.2) 100%);
+  }
+  .collection-tips{
+    padding-left: 68px;
+  }
+  .van-sidebar-item--select::before {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    width: 0;
+    height: 100%;
+    background-color: transparent;
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+    content: "";
+  }
+  .collection-tips::before {
+    position: absolute;
+    top: 50%;
+    left: 32px;
+    width: 32px;
+    height: 32px;
+    background: url("assets/btn-collection-active.png");
+    background-size: 100% 100%;
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+    content: '';
+  }
+  .van-sidebar-item--select::after {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    width: 4px;
+    height: 100%;
+    background-color: #21AEC3;
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+    content: "";
+  }
+}
+
+//tab页
+.tabbar {
+  .van-tabbar {
+    height: 108px !important;
+    .van-tabbar-item__text {
+      font-size: 22px;
+    }
+    .van-tabbar-item__icon img {
+      height: 54px;
+    }
+  }
+}
+.PickerSex {
+  .van-cell__title {
+    flex: none;
+    width: 180px;
+  }
+}
+
+.van-tabbar--fixed{
+  z-index:9999
+}
+//录入条码
+.materialItem{
+  .van-stepper__minus{
+    color: #333;
+    background-color: #fff;
+    border: 1px solid #21AEC3;
+  }
+  .van-stepper__plus{
+    color: #fff;
+    background-color: #21AEC3;
+    font-weight: bold;
+  }
+  .van-stepper__input{
+    color: #21AEC3;
+  }
+}
+//录入信息
+.editInfo{
+  .img-icon{
+    height: 32px;
+  }
+}
+//预览信息,支付
+.checkOrderInfo,.pay{
+  .info1,.info2{
+    .van-cell__title{
+      color: #333;
+      font-size: 32px;
+      font-weight: bold;
+    }
+    .tubes-name{
+      font-size: 32px;
+      color: #333;
+      font-weight: bold;
+    }
+    .tubes-num{
+      font-size: 28px;
+      color: #333;
+      padding-left: 15px;
+      font-weight: normal;
+    }
+  }
+  .info1{
+    .van-cell__value{
+      color: #1CAEC3;
+      font-size: 32px;
+    }
+  }
+  .info2{
+    .van-cell__value{
+      color: #333;
+      font-size: 28px;
+    }
+  }
+}
+
+//医生个人中心
+.van-cell__left-icon{
+  margin-right: 16px;
+  .item-list{
+    height: 104px;
+    .van-cell__title{
+      color: #333;
+      font-size: 28px;
+    }
+  }
+}
+.order{
+  .van-tabs__nav--card{
+    margin: 0;
+    height: 108px;
+    background-color: #fff;
+    padding: 24px 0;
+    border: none;
+    box-sizing: border-box;
+  }
+  .van-tabs--card>.van-tabs__wrap{
+    height: 108px;
+  }
+  .van-tab{
+    border: 1px solid transparent!important;
+    margin-left: 24px;
+    height: 56px;
+  }
+  .van-tab--active{
+    border: 1px solid #21AEC3!important;
+  }
+}
+
