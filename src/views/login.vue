@@ -47,9 +47,9 @@ name: "login",
 
           console.log(!res.wechatAuth)
           if(!res.wechatAuth){
-            this.$router.push('/authorize')
+            this.$router.replace('/authorize')
           }else{
-            this.$router.push('/tabbar/user')
+            this.$router.replace('/tabbar/user')
           }
 
         }

@@ -255,6 +255,7 @@ export default {
         background-image: url("../assets/tine-search.png");
         background-size: 100% 100%;
         margin-right: 16px;
+        flex-shrink:0;
       }
 
       .order-search-title {

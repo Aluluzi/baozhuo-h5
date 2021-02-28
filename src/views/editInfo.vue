@@ -26,6 +26,8 @@
       </van-field>
       <van-field
           v-model="phone"
+          type="tel"
+          :maxlength="11"
           center
           clearable
           label="手机号码"
@@ -130,7 +132,9 @@ export default {
     }
   },
   mounted() {},
-  activated() {},
+  activated() {
+    console.log(33)
+  },
   destroy() {},
   methods: {
     buy() {
@@ -146,8 +150,10 @@ export default {
         samplingTime:this.time,
         docName:this.tokenInfo.name,
       }
+      console.log(patientInfo)
       this.$store.dispatch("savePatientInfo", patientInfo);
-      this.$router.replace('/checkOrderInfo')
+      console.log(this.$store.state.patientInfo)
+      this.$router.push('/checkOrderInfo')
     },
     timeConfirm(time){
       this.time = getFormatDate(time,'ymdhms','-');

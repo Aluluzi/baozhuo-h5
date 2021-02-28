@@ -67,7 +67,7 @@ export default {
     next() {
       const {type} = this.$route.query
       this.$store.dispatch("saveTubesList", this.list);
-      this.$router.replace({
+      this.$router.push({
         path: '/editInfo',
         query:{
           type: type

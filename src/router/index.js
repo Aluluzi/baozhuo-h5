@@ -66,6 +66,7 @@ const router = new Router({
             meta: {
                 title: "录入条码",
                 index: 4,
+                keep_alive: true,
             },
             component: () => import("@/views/editCode.vue"),
         },
@@ -74,16 +75,28 @@ const router = new Router({
             name: "editInfo",
             meta: {
                 title: "录入信息",
-                index: 4,
+                index: 5,
+                keep_alive: true,
             },
             component: () => import("@/views/editInfo.vue"),
+        },
+        {
+            path: "/checkOrderInfo",
+            name: "checkOrderInfo",
+            meta: {
+                title: "预览信息",
+                index: 6,
+                keep_alive: true,
+            },
+            component: () => import("@/views/checkOrderInfo.vue"),
         },
         {
             path: "/pay",
             name: "pay",
             meta: {
                 title: "支付",
-                index: 4,
+                index: 7,
+                keep_alive: true,
             },
             component: () => import("@/views/pay.vue"),
         },
@@ -135,15 +148,6 @@ const router = new Router({
             component: () => import("@/views/EinvoiceDetail.vue"),
         },
         {
-            path: "/checkOrderInfo",
-            name: "checkOrderInfo",
-            meta: {
-                title: "预览信息",
-                index: 1,
-                keep_alive: true,
-            },
-            component: () => import("@/views/checkOrderInfo.vue"),
-        },{
             path: "/salesOrderList",
             name: "salesOrderList",
             meta: {

@@ -28,8 +28,6 @@
 <script>
 import Footbtn from "@/components/Footbtn";
 
-import wx from "weixin-js-sdk";
-
 export default {
   name: "checkOrderInfo",
   components: {
@@ -46,6 +44,7 @@ export default {
   computed: {},
   created() {
     const {orderList, tubesList, patientInfo} = this.$store.state
+    debugger
 
     this.orderList = orderList
     this.tubesList = tubesList
@@ -77,7 +76,7 @@ export default {
   },
   methods: {
     toPay(){
-      this.$router.replace({
+      this.$router.push({
         path:'/pay',
         name:'pay',
         params: {

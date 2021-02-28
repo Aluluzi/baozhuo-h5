@@ -135,7 +135,7 @@ export default {
     },
     next(){
       store.dispatch("saveOrderList", this.orderGoodsList);
-      this.$router.replace({
+      this.$router.push({
         path:'/editCode',
         query:{
           type:1//1医生下单，2业务员编辑

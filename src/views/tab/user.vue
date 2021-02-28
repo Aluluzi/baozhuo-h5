@@ -3,8 +3,8 @@
     <div class="userInfo">
       <div class="userInfo-headImg"><img v-lazy="tokenInfo.user.img" alt=""></div>
       <div class="userInfo-box">
-        <p class="userInfo-name">{{tokenInfo.user.name}}</p>
-        <p class="userInfo-phone">{{tokenInfo.user.phone}}</p>
+        <p class="userInfo-name">{{ tokenInfo.user.name }}</p>
+        <p class="userInfo-phone">{{ tokenInfo.user.phone }}</p>
       </div>
     </div>
     <div class="box-shadow"></div>
@@ -13,7 +13,8 @@
     <div class="work-info" v-if="roleType==4">
       <p class="van-hairline--bottom">
         <span class="title">我的业务员</span>
-        <span class="value">{{tokenInfo.user.salesman.name}}/{{tokenInfo.user.salesman.phone}}</span>
+        <span
+            class="value">{{ (tokenInfo.user.salesman && tokenInfo.user.salesman.name) || '-' }}/{{ (tokenInfo.user.salesman && tokenInfo.user.salesman.phone) || '-' }}</span>
       </p>
       <p>
         <span class="title">所属诊所</span>
@@ -37,14 +38,13 @@ export default {
   name: "user",
   components: {},
   data() {
-    return {
-    }
+    return {}
   },
   computed: {
     ...mapState({
       tokenInfo: "tokenInfo",
     }),
-    roleType(){
+    roleType() {
       return this.tokenInfo.roleType
       //roleType
       // 1-后台管理员帐号、
@@ -60,10 +60,10 @@ export default {
   destroy() {
   },
   methods: {
-    link(type){
+    link(type) {
       this.$router.push(type)
     },
-    logout(){
+    logout() {
       this.$store.dispatch("saveToken", {});
       localStorage.removeItem("loginInfo");
 
@@ -94,7 +94,8 @@ export default {
       border: 3px solid #fff;
       margin-right: 27px;
       background: #fff;
-      >img{
+
+      > img {
         width: 100%;
         height: 100%;
       }

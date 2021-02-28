@@ -169,7 +169,7 @@ export default {
               _this.timeList = [
                 {title: '采样时间', value: datas.samplingTime},
                 {title: '下单时间', value: datas.created},
-                {title: '付款时间', value: datas.samplingTime},
+                {title: '付款时间', value: datas.payTime},
               ]
             }
           })
