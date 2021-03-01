@@ -16,7 +16,7 @@ module.exports = {
     proxy:{
       '/apis': {
         // target: 'http://localhost:8080',
-        target: 'http://www.baozhuoyl.com',
+        target: 'https://www.baozhuoyl.com',
         changeOrigin: true,
         pathRewrite: {
           '^/apis': '/'

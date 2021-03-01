@@ -76,7 +76,7 @@ import {baseURL, pdfURL} from "@/config";
 import {mapState} from "vuex";
 import store from "@/store";
 
-import {tradeCancel, getPayParam} from '@/api/index'
+import {tradeCancel, getPayParam, weChatGetTicked} from '@/api/index'
 import wx from "weixin-js-sdk";
 
 export default {
@@ -210,26 +210,59 @@ export default {
         console.log(res)
       })
     },
+    authorize(_package,signType, paySign){
+      const redirect_uri = window.location.href.split('#')[0]
+      weChatGetTicked({
+        url:redirect_uri
+      }).then(res=>{
+        const {appId,timestamp,noncestr,signature} = res
+        wx.config({
+          debug: true,
+          appId: appId,
+          timestamp: timestamp,
+          nonceStr: `${noncestr}`,
+          signature: signature,
+          jsApiList: ['chooseWXPay']
+        })
+        wx.ready(res => {
+          wx.checkJsApi({/*检查微信支付是否验证通过*/
+            jsApiList: ['chooseWXPay'],
+            success: res => {
+              console.log('checked api:', res)
+              /*微信支付*/
+              wx.chooseWXPay({
+                appId:appId,
+                timestamp: timestamp, // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
+                nonceStr: noncestr, // 支付签名随机串，不长于 32 位
+                package: _package, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=\*\*\*）
+                signType: signType, // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
+                paySign: paySign, // 支付签名
+                success: function () {
+                  // this.$router.replace('/order')
+                  let backNum=history.length-1;
+                  history.go(-backNum);
+                },
+                cancel:function(res){
+                  this.$toast('您取消了支付')
+                }
+              });
+            },
+            fail: err => {
+              console.log('check api fail:', err)
+            }
+          })
+        })
+      })
+    },
     _pay() {
       console.log(4)
       getPayParam({
         id: this.id
       }).then(res=>{
         if(res){
-          wx.chooseWXPay({
-            appId:res.appId,
-            timeStamp: res.timeStamp, // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
-            nonceStr: res.nonceStr, // 支付签名随机串，不长于 32 位
-            package: res.package, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=\*\*\*）
-            signType: res.signType, // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
-            paySign: res.paySign, // 支付签名
-            success: function () {
-              this.$router.replace('/order')
-            },
-            cancel:function(res){
-              this.$toast('您取消了支付')
-            }
-          });
+
+this.authorize(res.package,res.signType,res.paySign)
+
         }
       })
     },

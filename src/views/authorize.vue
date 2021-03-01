@@ -61,11 +61,23 @@
                 jsApiList: ['chooseWXPay']
               })
               const appId = res.appId
-              wx.ready((res) => {
+              wx.ready(res => {
+                wx.checkJsApi({/*检查微信支付是否验证通过*/
+                  jsApiList: ['chooseWXPay'],
+                  success: res => {
+                    console.log('checked api:', res)
+                  },
+                  fail: err => {
+                    console.log('check api fail:', err)
+                  }
+                })
                 let url = encodeURIComponent(redirect_uri)
                 let urls = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid='+appId+'&redirect_uri='+url+'&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect'
                 window.location = urls
               })
+              // wx.ready((res) => {
+              //
+              // })
             })
           },
           getCode(code){

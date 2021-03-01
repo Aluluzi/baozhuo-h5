@@ -103,7 +103,9 @@ export default {
               paySign: res.paySign, // 支付签名
               success: function () {
                 console.log('支付成功')
-                this.$router.replace('/order')
+                // this.$router.replace('/order')
+                let backNum=history.length-1;
+                history.go(-backNum);
               },
               cancel:function(res){
                 this.$toast('您取消了支付')
@@ -111,7 +113,9 @@ export default {
             });
           }else{
             this.$toast('由于您是月结用户，该订单即将生成')
-            this.$router.replace('/order')
+            // this.$router.replace('/order')
+            let backNum=history.length-1;
+            history.go(-backNum);
           }
         })
       } else {
@@ -133,14 +137,18 @@ export default {
                     paySign: res.paySign, // 支付签名
                     success: function () {
                       console.log('支付成功')
-                      this.$router.replace('/order')
+                      // this.$router.replace('/order')
+                      let backNum=history.length-1;
+                      history.go(-backNum);
                     },
                     cancel:function(res){
                       this.$toast('您取消了支付')
                     }
                   });
                 }else{
-                  this.$router.replace('/order')
+                  // this.$router.replace('/order')
+                  let backNum=history.length-1;
+                  history.go(-backNum);
                 }
               })
             })
