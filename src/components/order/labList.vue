@@ -94,7 +94,7 @@ export default {
     getCategoryList() {
       getCategoryList({
         labId: this.labId,
-        size: 10
+        size: 99999
       }).then(res => {
         const arr = res.data.map(item => {
           return {
@@ -236,7 +236,7 @@ export default {
 
 .classify-sidebar {
   min-width: 226px;
-  height: calc(100vh - 202px);
+  height: calc(100vh - 350px);
   overflow-y: scroll;
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;

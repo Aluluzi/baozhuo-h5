@@ -16,8 +16,8 @@ import {
 } from '@/utils/utils.js'
 // 创建axios实例
 const service = axios.create({
-	// baseURL: '/apis',
-	baseURL,
+	baseURL: '/apis',
+	// baseURL,
 	timeout: 15000
 });
 // request拦截器

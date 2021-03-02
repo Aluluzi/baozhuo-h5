@@ -648,4 +648,49 @@ export const getNextDate = (year, month, day = -1, separator = "") => {
  *   const arr = [0, 1, [2, 3], [4, 5, [6, 7]], [8, [9, 10, [11, 12]]]];
  *   Flat(arr); // [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
  * */
-const Flat = (arr = []) => arr.reduce((t, v) => t.concat(Array.isArray(v) ? Flat(v) : v), [])
+export const Flat = (arr = []) => arr.reduce((t, v) => t.concat(Array.isArray(v) ? Flat(v) : v), [])
+
+/**
+ * [scaleNum 通过操作其字符串将一个浮点数放大或缩小]
+ * @param  {number} num      要放缩的浮点数
+ * @param  {number} pos      小数点移动位数
+ * pos大于0为放大，小于0为缩小；不传则默认将其变成整数
+ * @return {number}          放缩后的数
+ *
+ * 0.57*100=56.99999999999999
+ * scaleNum(0.57,2)=57
+ * scaleNum(57,-2)=0.57
+ */
+export const scaleNum = (num, pos) =>{
+  if (num === 0 || pos === 0) {
+    return num;
+  }
+  let parts = num.toString().split('.');
+  const intLen = parts[0].length;
+  const decimalLen = parts[1] ? parts[1].length : 0;
+
+  // 默认将其变成整数，放大倍数为原来小数位数
+  if (pos === undefined) {
+    return parseFloat(parts[0] + parts[1]);
+  } else if (pos > 0) {
+    // 放大
+    let zeros = pos - decimalLen;
+    while (zeros > 0) {
+      zeros -= 1;
+      parts.push(0);
+    }
+  } else {
+    // 缩小
+    let zeros = Math.abs(pos) - intLen;
+    while (zeros > 0) {
+      zeros -= 1;
+      parts.unshift(0);
+    }
+  }
+
+  const idx = intLen + pos;
+  parts = parts.join('').split('');
+  parts.splice(idx > 0 ? idx : 0, 0, '.');
+
+  return parseFloat(parts.join(''));
+}
