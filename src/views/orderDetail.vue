@@ -104,6 +104,8 @@ export default {
       reports: [],
       clinic_name: '',
       doc_name: '',
+      orderListRequestUrl:baseURL+'/api/trade/',
+      // orderListRequestUrl:'http://localhost:8080/apis/api/trade/',
     };
   },
   computed: {
@@ -136,7 +138,7 @@ export default {
     getData() {
       const _this = this;
       this.$http
-          .post(baseURL + '/api/trade/' + this.id, {header: 'token'})
+          .post(this.orderListRequestUrl + this.id, {header: 'token'})
           .then(function (res) {
             if (res.data.code === 200) {
               const datas = res.data.data
@@ -207,36 +209,37 @@ export default {
       tradeCancel({
         id: this.id
       }).then(res => {
-        console.log(res)
+        this.$toast('您已取消该笔订单')
       })
     },
-    authorize(_package,signType, paySign){
+    authorize(params){
       const redirect_uri = window.location.href.split('#')[0]
       weChatGetTicked({
         url:redirect_uri
       }).then(res=>{
         const {appId,timestamp,noncestr,signature} = res
         wx.config({
-          debug: true,
+          debug: false,
           appId: appId,
           timestamp: timestamp,
           nonceStr: `${noncestr}`,
           signature: signature,
           jsApiList: ['chooseWXPay']
         })
-        wx.ready(res => {
+        wx.ready(data => {
           wx.checkJsApi({/*检查微信支付是否验证通过*/
             jsApiList: ['chooseWXPay'],
-            success: res => {
-              console.log('checked api:', res)
+            success: params => {
+              console.log('checked api:', params)
+              alert(JSON.stringify(params))
               /*微信支付*/
               wx.chooseWXPay({
-                appId:appId,
-                timestamp: timestamp, // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
-                nonceStr: noncestr, // 支付签名随机串，不长于 32 位
-                package: _package, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=\*\*\*）
-                signType: signType, // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
-                paySign: paySign, // 支付签名
+                appId: params.appId,
+                timestamp: params.timeStamp, // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
+                nonceStr: params.nonceStr, // 支付签名随机串，不长于 32 位
+                package: params.package, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=\*\*\*）
+                signType: params.signType, // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
+                paySign: params.paySign, // 支付签名
                 success: function () {
                   // this.$router.replace('/order')
                   let backNum=history.length-1;
@@ -247,37 +250,50 @@ export default {
                 }
               });
             },
-            fail: err => {
-              console.log('check api fail:', err)
+            fail: params => {
+              console.log('check api fail:', params)
             }
           })
         })
       })
     },
     _pay() {
-      console.log(4)
       getPayParam({
         id: this.id
       }).then(res=>{
         if(res){
-
-this.authorize(res.package,res.signType,res.paySign)
+          this.authorize(res)
+          // wx.chooseWXPay({
+          //   appId:res.appId,
+          //   timestamp: res.timeStamp, // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
+          //   nonceStr: res.nonceStr, // 支付签名随机串，不长于 32 位
+          //   package: res.package, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=\*\*\*）
+          //   signType: res.signType, // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
+          //   paySign: res.paySign, // 支付签名
+          //   success: function () {
+          //     let backNum=history.length-1;
+          //     history.go(-backNum);
+          //   },
+          //   cancel:function(res){
+          //     this.$toast('您取消了支付')
+          //   }
+          // });
 
         }
       })
     },
 
     checkReport(url) {
-      const link = pdfURL + url
+
       if (navigator.userAgent.match(/(iPhone|iPod|iPad);?/i)) {
         //ios
-        window.location.href = link;
+        window.location.href = pdfURL + url;
       } else {
         //android
         this.$router.push({
           path: "/EinvoiceDetail",
           query: {
-            invoice_uri: link,
+            invoice_uri: '/preview/'+url,
           },
         });
       }

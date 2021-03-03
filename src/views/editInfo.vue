@@ -13,12 +13,12 @@
           <van-radio-group v-model="sex" direction="horizontal">
             <van-radio name="M">男
               <template #icon="props">
-                <img class="img-icon" :src="props.checked ? activeIcon : inactiveIcon" />
+                <img class="img-icon" :src="props.checked ? activeIcon : inactiveIcon"/>
               </template>
             </van-radio>
             <van-radio name="F">女
               <template #icon="props">
-                <img class="img-icon" :src="props.checked ? activeIcon : inactiveIcon" />
+                <img class="img-icon" :src="props.checked ? activeIcon : inactiveIcon"/>
               </template>
             </van-radio>
           </van-radio-group>
@@ -55,8 +55,8 @@
       <van-field label="送检医生" placeholder="请输入送检医生姓名" :value="doctorName" readonly/>
     </div>
     <div class="btn-box">
-      <Footbtn v-if="type==1" text="预览" @click_btn="buy" :disabled="isClick" />
-      <Footbtn v-else text="保存" @click_btn="save" :disabled="isClick" />
+      <Footbtn v-if="type==1" text="预览" @click_btn="buy" :disabled="isClick"/>
+      <Footbtn v-else text="保存" @click_btn="save" :disabled="isClick"/>
     </div>
   </div>
 </template>
@@ -82,14 +82,14 @@ export default {
       phone: "",
       time: "",
       currentDate: new Date(),
-      showTimePicker:false,
-      activeIcon:activeIcon,//选中图标
-      inactiveIcon:inactiveIcon,//没选中图标
-      doctorName:'',
+      showTimePicker: false,
+      activeIcon: activeIcon,//选中图标
+      inactiveIcon: inactiveIcon,//没选中图标
+      doctorName: '',
 
-      type:null,////1医生下单，2业务员编辑
+      type: null,////1医生下单，2业务员编辑
       patient: {},////患者信息
-      samplingTime:'',////采样时间
+      samplingTime: '',////采样时间
     };
   },
   watch: {},
@@ -113,15 +113,15 @@ export default {
   },
   created() {
     const {type} = this.$route.query
-    const {patient,samplingTime,doctorName} = this.$route.params
+    const {patient, samplingTime, doctorName} = this.$route.params
     this.type = type
     this.patient = patient
     this.samplingTime = samplingTime
 
-    if(type==1){
+    if (type == 1) {
       this.doctorName = this.tokenInfo.name
     }
-    if(type==2){
+    if (type == 2) {
       this.doctorName = doctorName
       this.name = this.patient.name
       this.age = this.patient.age
@@ -131,44 +131,49 @@ export default {
       this.currentDate = new Date(this.samplingTime)
     }
   },
-  mounted() {},
+  mounted() {
+  },
   activated() {
     console.log(33)
   },
-  destroy() {},
+  destroy() {
+  },
   methods: {
     buy() {
       if (!isPoneAvailable(this.phone)) {
-        this.$toast("受检人手机号码格式错误！");
+        this.$toast("手机号码格式错误！");
+        return;
+      }
+      if ( +this.age < 0 || +this.age >= 125) {
+        this.$toast("年龄填写错误！");
         return;
       }
       const patientInfo = {
-        name:this.name,
-        phone:this.phone,
-        age:this.age,
-        sex:this.sex,
-        samplingTime:this.time,
-        docName:this.tokenInfo.name,
+        name: this.name,
+        phone: this.phone,
+        age: this.age,
+        sex: this.sex,
+        samplingTime: this.time,
+        docName: this.tokenInfo.name,
       }
-      console.log(patientInfo)
+
       this.$store.dispatch("savePatientInfo", patientInfo);
-      console.log(this.$store.state.patientInfo)
       this.$router.push('/checkOrderInfo')
     },
-    timeConfirm(time){
-      this.time = getFormatDate(time,'ymdhms','-');
+    timeConfirm(time) {
+      this.time = getFormatDate(time, 'ymdhms', '-');
       this.showTimePicker = false;
     },
-    save(){
+    save() {
       this.patient.name = this.name;
       this.patient.age = +this.age;
       this.patient.sex = this.sex;
       this.patient.phone = this.phone;
       const info = {
-        patient:{
+        patient: {
           ...this.patient
         },
-        samplingTime:getFormatDate(this.time,'ymdhms','-'),
+        samplingTime: getFormatDate(this.time, 'ymdhms', '-'),
       }
       this.$store.dispatch("saveEditPatientInfo", info);
       history.go(-1)
@@ -203,7 +208,7 @@ export default {
     }
   }
 
-  .btn-box{
+  .btn-box {
     position: fixed;
     left: 0;
     right: 0;
@@ -225,8 +230,6 @@ export default {
     letter-spacing: 0;
   }
 }
-
-
 
 
 </style>

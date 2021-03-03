@@ -1,39 +1,34 @@
 <template>
   <div class="einvoiceDetail">
 
-    <!--        <div v-if="ios_suo">-->
-    <!--            <object :data="invoice_uri" width="100%" height="100%"></object>-->
-    <!--            <iframe :src="invoice_uri" frameborder="0" style="width: 100%; height: 100%"  scrolling="yes"></iframe>-->
-    <!--&lt;!&ndash;            <embed :src="invoice_uri" frameborder="0" style="width: 100%; height: 100%" scrolling="yes"></embed>&ndash;&gt;-->
-    <!--&lt;!&ndash;            <pdf :src="invoice_uri"></pdf>&ndash;&gt;-->
-    <!--        </div>-->
-    <div class="content" v-if="!ios_suo">
-      <span>{{ invoice_uri }}</span>
-      <p>暂不支持安卓手机在线阅读pdf,请复制链接到本地浏览器打开</p>
+    <div v-if="isShowPdf" id="pdf-box"></div>
+
+    <div v-else>
+      <div class="content" >
+        <span>{{ invoice_uri }}</span>
+        <p>暂不支持安卓手机在线阅读pdf,请复制链接到本地浏览器打开</p>
+      </div>
+      <div class="btn-box">
+        <FootBtn text="复制链接"
+                 :disabled="false"
+                 data-clipboard-action="copy"
+                 class="cobyOrderSn"
+                 :data-clipboard-text="invoice_uri"
+                 @click_btn="copyLink"/>
+      </div>
     </div>
-    <div class="btn-box">
-      <FootBtn text="复制链接"
-               :disabled="false"
-               data-clipboard-action="copy"
-               class="cobyOrderSn"
-               :data-clipboard-text="invoice_uri"
-               @click_btn="copyLink"/>
-    </div>
+
   </div>
 </template>
 <script>
-// import Copy from "@/components/Copy.vue";
-import Clipboard from "clipboard";
+import Clipboard from "clipboard"; //复制
 import FootBtn from "@/components/Footbtn.vue";
-
-import pdf from 'vue-pdf'
+import Pdfh5 from "pdfh5";
 
 export default {
   name: "EinvoiceDetail",
   components: {
-    // Copy,
     FootBtn,
-    pdf
   },
   metaInfo: {
     meta: [
@@ -45,27 +40,28 @@ export default {
   },
   data() {
     return {
-      deviceHeight: "",
       invoice_uri: "",
-      // pdfSrc:'',
-      ios_suo: false,
-      // numPages:null,
+
+      Pdfh5:null,
+      isShowPdf:true,
     };
   },
   created() {
     this.invoice_uri = this.$route.query.invoice_uri;
-    if (navigator.userAgent.match(/(iPhone|iPod|iPad);?/i)) {
-      //ios
-      this.ios_suo = true;
-
-      // window.location.replace(this.invoice_uri)
-      window.location.href = this.invoice_uri
-    } else {
-      //android
-      this.ios_suo = false
-    }
   },
   mounted() {
+
+    //实例化
+    this.pdfh5 = new Pdfh5("#pdf-box", {
+      pdfurl: this.invoice_uri
+    });
+    //监听完成事件
+    this.pdfh5.on("complete", function (status, msg, time) {
+      console.log("状态：" + status + "，信息：" + msg + "，耗时：" + time + "毫秒，总页数：" + this.totalNum)
+      if(status!=='success'){
+        this.isShowPdf = false
+      }
+    })
   },
   destroyed() {
   },
@@ -84,6 +80,8 @@ export default {
 };
 </script>
 <style scoped lang="scss">
+@import "~pdfh5/css/pdfh5.css";
+
 .einvoiceDetail {
   overflow-y: auto;
   position: relative;
@@ -124,6 +122,12 @@ export default {
 
   .btn-box {
     padding: 32px;
+  }
+
+
+  #pdf-box{
+    width: 100%;
+    height: 100%;
   }
 }
 </style>

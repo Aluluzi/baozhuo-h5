@@ -50,7 +50,7 @@ export default {
       box-sizing: border-box;
       .clinic-name{
         color: #333;
-        font-size: 48px;
+        font-size: 40px;
         margin-bottom: 10px;
         font-weight: bold;
       }

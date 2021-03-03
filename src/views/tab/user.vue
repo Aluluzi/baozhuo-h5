@@ -67,6 +67,8 @@ export default {
       this.$store.dispatch("saveToken", {});
       localStorage.removeItem("loginInfo");
 
+      this.$toast('您已安全退出登录')
+
       this.$router.replace("/login");
 
     }

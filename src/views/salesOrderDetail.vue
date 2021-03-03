@@ -254,7 +254,19 @@ export default {
             .catch(() => {
             });
       }else{//通过
-        this.submit(type)
+        // if(){}
+        console.log(this.materialList)
+        let isConfirm = false
+        for(let k of this.materialList){
+          if(!k.barCode){
+            isConfirm = false
+          }
+        }
+        if(isConfirm){
+          this.submit(type)
+        }else{
+          this.$toast('没有填写条码！')
+        }
       }
     },
     submit(type){

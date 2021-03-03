@@ -16,8 +16,8 @@ import {
 } from '@/utils/utils.js'
 // 创建axios实例
 const service = axios.create({
-	baseURL: '/apis',
-	// baseURL,
+	// baseURL: '/apis',
+	baseURL,
 	timeout: 15000
 });
 // request拦截器
@@ -53,24 +53,24 @@ service.interceptors.response.use(
 				store.dispatch("saveToken", {});
 				localStorage.removeItem('loginInfo');
 				//登录信息失效从新获取，若code失效防止接口挂了弹框阻止循环刷登录
-				let redirectUrl = window.location.href;
-				let {
-					code,
-					state
-				} = GetRequest(redirectUrl) // 截取url上的code ,可能没有,则返回''空字符串
-				if (code) {
-					redirectUrl = delParam('code', redirectUrl);
-					redirectUrl = delParam('state', redirectUrl);
-					Dialog.alert({
-						message: '登录失效,点击重新获取'
-					}).then(() => {
-						redirectUrl = encodeURIComponent(redirectUrl);
-						window.location.replace(`${baseURL}/site/wechat/redirect?official_account=1&redirect_url=${redirectUrl}`)
-					});
-				} else {
-					redirectUrl = encodeURIComponent(redirectUrl);
-					window.location.replace(`${baseURL}/site/wechat/redirect?official_account=1&redirect_url=${redirectUrl}`)
-				}
+				// let redirectUrl = window.location.href;
+				// let {
+				// 	code,
+				// 	state
+				// } = GetRequest(redirectUrl) // 截取url上的code ,可能没有,则返回''空字符串
+				// if (code) {
+				// 	redirectUrl = delParam('code', redirectUrl);
+				// 	redirectUrl = delParam('state', redirectUrl);
+				// 	Dialog.alert({
+				// 		message: '登录失效,点击重新获取'
+				// 	}).then(() => {
+				// 		redirectUrl = encodeURIComponent(redirectUrl);
+				// 		window.location.replace(`${baseURL}/site/wechat/redirect?official_account=1&redirect_url=${redirectUrl}`)
+				// 	});
+				// } else {
+				// 	redirectUrl = encodeURIComponent(redirectUrl);
+				// 	window.location.replace(`${baseURL}/site/wechat/redirect?official_account=1&redirect_url=${redirectUrl}`)
+				// }
 			} else {
 				Toast(response.data.message);
 			}
