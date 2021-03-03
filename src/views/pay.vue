@@ -165,7 +165,7 @@ export default {
           wx.checkJsApi({/*检查微信支付是否验证通过*/
             jsApiList: ['chooseWXPay'],
             success: res => {
-              alert(JSON.stringify(params))
+              // alert(JSON.stringify(params))
               /*微信支付*/
               wx.chooseWXPay({
                 appId: params.appId,

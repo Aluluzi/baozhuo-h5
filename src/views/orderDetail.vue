@@ -226,12 +226,11 @@ export default {
           signature: signature,
           jsApiList: ['chooseWXPay']
         })
-        wx.ready(data => {
+        wx.ready(res => {
           wx.checkJsApi({/*检查微信支付是否验证通过*/
             jsApiList: ['chooseWXPay'],
-            success: params => {
-              console.log('checked api:', params)
-              alert(JSON.stringify(params))
+            success: res => {
+              // alert(JSON.stringify(params))
               /*微信支付*/
               wx.chooseWXPay({
                 appId: params.appId,
@@ -241,7 +240,6 @@ export default {
                 signType: params.signType, // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
                 paySign: params.paySign, // 支付签名
                 success: function () {
-                  // this.$router.replace('/order')
                   let backNum=history.length-1;
                   history.go(-backNum);
                 },
@@ -250,8 +248,8 @@ export default {
                 }
               });
             },
-            fail: params => {
-              console.log('check api fail:', params)
+            fail: err => {
+              console.log('check api fail:', err)
             }
           })
         })

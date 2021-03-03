@@ -110,7 +110,8 @@ export default {
     },
     getLabList() {
       getLabList({
-        size: 10
+        // size: 10,
+        status: '1'
       }).then(res => {
         if (res) {
           this.tab_list = res.map(item => {

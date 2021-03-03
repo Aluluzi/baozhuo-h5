@@ -94,7 +94,8 @@ export default {
     getCategoryList() {
       getCategoryList({
         labId: this.labId,
-        size: 99999
+        size: 99999,
+        status: '1'
       }).then(res => {
         const arr = res.data.map(item => {
           return {
@@ -102,9 +103,7 @@ export default {
             id: item.id
           }
         })
-        // this.categoryList.push(...arr)
         this.categoryList = [...arr]
-        // this.onLoad(this.categoryList[0].id)
         this.onLoad(-1)
       })
     },
@@ -112,12 +111,12 @@ export default {
       this.list = []
       this.onLoad(id)
     },
-
     onLoad(id) {
       let params = {
         size: this.page_size,
         page: this.page,
         labId: this.labId,
+        status: '1',
         categoryId: id,
       };
 
