@@ -25,6 +25,7 @@
 import OrderItem from "@/components/OrderItem";
 import {tradeList} from "@/api/index";
 import {Debounce, getFormatDate} from "@/utils/utils.js";
+import {mapState} from "vuex";
 
 export default {
   name: "OrderList",
@@ -46,7 +47,19 @@ export default {
       isLoading: false,
     };
   },
-  computed: {},
+  computed: {
+    ...mapState({
+      tokenInfo: "tokenInfo",
+    }),
+    roleType() {
+      return this.tokenInfo.roleType
+      //roleType
+      // 1-后台管理员帐号、
+      // 2-业务员帐号
+      // 3-诊所管理帐号
+      // 4-医生帐号
+    }
+  },
   created() {
     this.pageHeight =
         document.documentElement.clientHeight - 98 ||
@@ -105,6 +118,15 @@ export default {
         size: this.size,
         ...val
       };
+      if(this.roleType==2){
+        params.salesmanId = this.tokenInfo.user.salesman.id
+      }
+      if(this.roleType==3){
+        params.clinicId = this.tokenInfo.user.clinic.id
+      }
+      if(this.roleType==4){
+        params.doctorId = this.tokenInfo.user.doctor.id
+      }
 
       tradeList(params).then((res) => {
         this.$emit('getTotalAmount',res.totalAmount)

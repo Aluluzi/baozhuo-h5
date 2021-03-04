@@ -10,7 +10,7 @@
     <div class="box-shadow"></div>
 
 
-    <div class="work-info" v-if="roleType==4">
+    <div class="work-info" v-if="roleType==4 || roleType==3">
       <p class="van-hairline--bottom">
         <span class="title">我的业务员</span>
         <span
@@ -179,6 +179,17 @@ export default {
     bottom: 160px;
     left: 50%;
     transform: translateX(-50%);
+  }
+}
+
+@media only screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) {
+  .logout {
+    bottom: 200px;
+  }
+}
+@media only screen and (device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) {
+  .logout {
+    bottom: 200px;
   }
 }
 </style>

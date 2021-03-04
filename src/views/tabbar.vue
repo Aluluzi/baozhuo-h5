@@ -11,7 +11,7 @@
       :route="true"
       :safe-area-inset-bottom="true"
     >
-      <van-tabbar-item :to="{name:'getOrder'}" v-if="roleType==4">
+      <van-tabbar-item :to="{name:'getOrder'}" v-if="roleType==4 || roleType==3">
         <span>我要下单</span>
         <img
           slot="icon"

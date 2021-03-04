@@ -6,7 +6,8 @@
 
 <script>
 import clinicItem from "@/components/clinicItem";
-import {getClinicList} from '@/api/index'
+import {getClinicList} from '@/api/index';
+import {mapState} from "vuex";
 
 export default {
     name: "clinicList",
@@ -18,7 +19,11 @@ export default {
           list:[]
         }
     },
-    computed:{},
+    computed:{
+      ...mapState({
+        tokenInfo: "tokenInfo",
+      }),
+    },
     created(){
       this.getInfo()
     },
@@ -29,6 +34,7 @@ export default {
         getClinicList({
           size:9999,
           page:1,
+          salesmanId:this.tokenInfo.user.salesman.id
         }).then(res=>{
           if(res){
             this.list = [...res.data]
