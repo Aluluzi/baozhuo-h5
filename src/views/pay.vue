@@ -40,7 +40,7 @@ export default {
     }),
   },
   created() {
-    const discount = (this.tokenInfo.user.clinic.discount) / 100
+    const discount = scaleNum(this.tokenInfo.user.clinic.discount, -2)
     const {orderList} = this.$route.params
 
     let price = 0
@@ -48,8 +48,8 @@ export default {
       price += k.price
     }
 
-    this.price = (scaleNum(scaleNum(price, 2) / 100, -2)).toFixed(2);//精度计算
-    this.payPrice = (scaleNum(scaleNum(this.price, 2) / scaleNum(discount, 2), -2)).toFixed(2);//精度计算
+    this.price = (scaleNum(price, -2)).toFixed(2);//精度计算
+    this.payPrice = (scaleNum(scaleNum(this.price, 2) * discount, -2)).toFixed(2);//精度计算
     this.discountPrice = scaleNum((scaleNum(this.price, 2) - scaleNum(this.payPrice, 2)), -2)//精度计算
 
   },

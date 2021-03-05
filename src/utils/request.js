@@ -48,10 +48,15 @@ service.interceptors.response.use(
 		if (response.data.code === 200) {
 			return response.data.data
 		} else if (response.data.code === 302) {
-			if (is_weixin()) {
+			Toast(response.data.message);
+			store.dispatch("saveToken", {});
+			localStorage.removeItem('loginInfo');
+			window.location.reload();
+			// if (is_weixin()) {
 				//登录信息失效清除登录信息
-				store.dispatch("saveToken", {});
-				localStorage.removeItem('loginInfo');
+				// store.dispatch("saveToken", {});
+				// localStorage.removeItem('loginInfo');
+				// window.location.reload();
 				//登录信息失效从新获取，若code失效防止接口挂了弹框阻止循环刷登录
 				// let redirectUrl = window.location.href;
 				// let {
@@ -71,9 +76,9 @@ service.interceptors.response.use(
 				// 	redirectUrl = encodeURIComponent(redirectUrl);
 				// 	window.location.replace(`${baseURL}/site/wechat/redirect?official_account=1&redirect_url=${redirectUrl}`)
 				// }
-			} else {
-				Toast(response.data.message);
-			}
+			// } else {
+				// Toast(response.data.message);
+			// }
 		} else {
 			Toast(response.data.message);
 			return response.data.data

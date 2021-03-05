@@ -27,7 +27,7 @@
       <van-cell title="我的订单" icon="orders-o" is-link @click="link('/order')"></van-cell>
     </div>
 
-    <p class="logout" @click="logout">退出登录</p>
+    <span class="logout" @click="logout">退出登录</span>
   </div>
 </template>
 
@@ -79,6 +79,7 @@ export default {
 <style lang="scss" scoped>
 .user {
   padding: 38px 32px;
+  position: relative;
 
   .userInfo {
     height: 209px;
@@ -175,21 +176,22 @@ export default {
     text-decoration: underline;
     color: #21AEC3;
     font-size: 28px;
-    position: fixed;
-    bottom: 160px;
+    position: absolute;
+    //position: fixed;
+    bottom: -300px;
     left: 50%;
     transform: translateX(-50%);
   }
 }
 
-@media only screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) {
-  .logout {
-    bottom: 200px;
-  }
-}
-@media only screen and (device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) {
-  .logout {
-    bottom: 200px;
-  }
-}
+//@media only screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) {
+//  .logout {
+//    bottom: 200px;
+//  }
+//}
+//@media only screen and (device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) {
+//  .logout {
+//    bottom: 200px;
+//  }
+//}
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div class="materialItem">
     <div class="materialItem-info">
-      <img v-lazy="list.img" alt="">
+      <img v-lazy="pdfURL + list.img" alt="">
       <p class="van-ellipsis">{{ list.name }}</p>
     </div>
     <div class="edit-box">
@@ -12,12 +12,15 @@
 </template>
 
 <script>
+import {pdfURL} from "@/config";
+
 export default {
   name: "materialItem",
   components: {},
   props:['list','index'],
   data() {
     return {
+      pdfURL:pdfURL
     }
   },
   watch:{
