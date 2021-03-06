@@ -49,6 +49,7 @@
         methods: {
           authorize(){
             const redirect_uri = window.location.href.split('#')[0]
+            // const redirect_uri = 'https://baozhuoyl.com/'
             weChatGetTicked({
               url:redirect_uri
             }).then(res => {
@@ -58,7 +59,7 @@
                 timestamp: res.timestamp,
                 nonceStr: `${res.noncestr}`,
                 signature: res.signature,
-                jsApiList: ['chooseWXPay']
+                jsApiList: ['chooseWXPay','scanQRCode','checkJsApi']
               })
               const appId = res.appId
               wx.ready(res => {
@@ -69,6 +70,15 @@
                   },
                   fail: err => {
                     console.log('check api fail:', err)
+                  }
+                })
+                wx.checkJsApi({/*检查微信扫码是否验证通过*/
+                  jsApiList: ['scanQRCode'],
+                  success: res => {
+                    console.log('checked scanQRCode:', res)
+                  },
+                  fail: err => {
+                    console.log('check scanQRCode fail:', err)
                   }
                 })
                 let url = encodeURIComponent(redirect_uri)
@@ -100,49 +110,49 @@
               }
             })
           },
-            login(){
-                const redirect_uri = window.location.href.split('#')[0]
-              weChatGetTicked({
-                url:redirect_uri
-              }).then(res => {
-                    wx.config({
-                        debug: false,
-                        appId: res.appId,
-                        timestamp: res.timestamp,
-                        nonceStr: `${res.noncestr}`,
-                        signature: res.signature,
-                        jsApiList: []
-                    })
-                    const appId = res.appId
-                    wx.ready((res) => {
-                        let url = encodeURIComponent(redirect_uri)
-                        let urls = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid='+appId+'&redirect_uri='+url+'&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect'
-                        let code = serializeUrl().param.code
-                        if(!code){
-                            window.location = urls
-                        }else{
-                          console.log(code)
-                          weChatSendCode({
-                            code:code
-                          }).then(res=>{
-                            console.log(res)
-                            if(res.data.data){
-                              console.log('调用成功')
-                              const info = {...this.tokenInfo}
-                              info.wechatAuth = true
-                              this.$store.dispatch("saveToken", {
-                                ...info,
-                              });
-                              this.$router.push('/')
-                            }else{
-                              console.log('调用失败')
-                            }
-                          })
-
-                        }
-                    })
-                })
-            }
+            // login(){
+            //     const redirect_uri = window.location.href.split('#')[0]
+            //   weChatGetTicked({
+            //     url:redirect_uri
+            //   }).then(res => {
+            //         wx.config({
+            //             debug: false,
+            //             appId: res.appId,
+            //             timestamp: res.timestamp,
+            //             nonceStr: `${res.noncestr}`,
+            //             signature: res.signature,
+            //             jsApiList: []
+            //         })
+            //         const appId = res.appId
+            //         wx.ready((res) => {
+            //             let url = encodeURIComponent(redirect_uri)
+            //             let urls = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid='+appId+'&redirect_uri='+url+'&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect'
+            //             let code = serializeUrl().param.code
+            //             if(!code){
+            //                 window.location = urls
+            //             }else{
+            //               console.log(code)
+            //               weChatSendCode({
+            //                 code:code
+            //               }).then(res=>{
+            //                 console.log(res)
+            //                 if(res.data.data){
+            //                   console.log('调用成功')
+            //                   const info = {...this.tokenInfo}
+            //                   info.wechatAuth = true
+            //                   this.$store.dispatch("saveToken", {
+            //                     ...info,
+            //                   });
+            //                   this.$router.push('/')
+            //                 }else{
+            //                   console.log('调用失败')
+            //                 }
+            //               })
+            //
+            //             }
+            //         })
+            //     })
+            // }
         }
     };
 </script>

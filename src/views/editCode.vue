@@ -1,7 +1,7 @@
 <template>
   <div class="editCode">
     <div v-for="(item,index) in list" :key="index">
-      <materialItem :list="item"></materialItem>
+      <materialItem :list="item" :index="index"></materialItem>
     </div>
     <div class="btn-box">
       <Footbtn v-if="type==1" text="下一步" @click_btn="next" :disabled="false"/>
@@ -67,6 +67,7 @@ export default {
   methods: {
     next() {
       const {type} = this.$route.query
+      console.log(this.list)
       this.$store.dispatch("saveTubesList", this.list);
       this.$router.push({
         path: '/editInfo',

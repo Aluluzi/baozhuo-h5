@@ -121,7 +121,9 @@ export default {
       };
 
       if (id < 0) {//收藏
-        getFavoriteList().then(res => {
+        getFavoriteList({
+          id:this.labId
+        }).then(res => {
           const arr = res.map(item => {
             let isCheck = false
             for(let k of this.checkList){
@@ -185,7 +187,6 @@ export default {
       this.list[index].isCheck = !this.list[index].isCheck
       this.$set(this.list,index,this.list[index])
 
-      console.log(index)
       if(this.list[index].isCheck){
         this.checkList.push(this.list[index])
         this.$emit('check',{
