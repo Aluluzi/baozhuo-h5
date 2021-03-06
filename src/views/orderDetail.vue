@@ -5,7 +5,7 @@
     <div class="order-content">
       <!--订单信息-->
       <div class="order-info">
-        <p class="order-info-status" :class="status.className">{{ status.statusName }}</p>
+        <p class="order-info-status" :class="status.className">{{ status.statusName }} <span class="checkReports_title" v-if="reports.length>0" @click="openReportsBox">查看报告</span>  </p>
         <p class="order-info-sn">
           <span>订单编号：{{ orderId }}</span>
           <span>{{ labName }}</span>
@@ -49,14 +49,28 @@
         </div>
       </div>
       <!--      reports-->
-      <div class="order-item-other-box" v-if="reports.length>0">
-        <p class="order-item-other-title">检测报告</p>
-        <van-cell @click="checkReport(item)" v-for="(item,index) in reports" :key="index" class="van-hairline--bottom"
-                  :title="'报告'+ (+index+1)" is-link/>
-      </div>
+<!--      <div class="order-item-other-box" v-if="reports.length>0">-->
+<!--        <p class="order-item-other-title">检测报告</p>-->
+<!--        <van-cell @click="checkReport(item)" v-for="(item,index) in reports" :key="index" class="van-hairline&#45;&#45;bottom"-->
+<!--                  :title="'报告'+ (+index+1)" is-link/>-->
+<!--      </div>-->
 
       <FootBtnTwo v-if="status_id===10" left_text="取消订单" right_text="前往支付" @click_left_btn="_cancel"
                   @click_right_btn="_pay"/>
+
+
+      <van-popup v-model="isShowReports" closeable round>
+          <div class="reports-box" >
+            <p class="reports-box-title">检测报告</p>
+
+            <div class="reports-item-box">
+              <div class="reports-item" @click="checkReport(item)" v-for="(item,index) in reports" :key="index">
+                <i class="reports-logo"></i>
+                <span class="reports-name">查看报告{{ +index+1 }}</span>
+              </div>
+            </div>
+          </div>
+      </van-popup>
     </div>
   </div>
 </template>
@@ -106,7 +120,9 @@ export default {
       doc_name: '',
       orderListRequestUrl:baseURL+'/api/trade/',
       // orderListRequestUrl:'http://localhost:8080/apis/api/trade/',
-    };
+
+      isShowReports: false,
+    }
   },
   computed: {
     ...mapState({
@@ -199,9 +215,13 @@ export default {
           obj.statusName = '订单取消'
           break;
         case 60:
-          obj.className = 'order-info-status-bbyc'
+          obj.className = 'order-info-status-bgyc'
           obj.statusName = '报告已出'
           break;
+          default:
+            obj.className = 'order-info-status-qx'
+            obj.statusName = ' - '
+            break;
       }
       return obj;
     },
@@ -281,8 +301,11 @@ export default {
       })
     },
 
-    checkReport(url) {
+    openReportsBox(){
+      this.isShowReports = true;
 
+    },
+    checkReport(url) {
       if (navigator.userAgent.match(/(iPhone|iPod|iPad);?/i)) {
         //ios
         window.location.href = pdfURL + url;
@@ -342,6 +365,12 @@ export default {
       color: #FE9838;
       font-size: 40px;
       margin-bottom: 24px;
+      .checkReports_title{
+        color: #21AEC3;
+        font-size: 24px;
+        margin-left: 16px;
+        text-decoration: underline;
+      }
     }
 
     .order-info-status-dfk {
@@ -452,6 +481,44 @@ export default {
         font-size: 28px;
         flex: 1;
         text-align: right;
+      }
+    }
+  }
+
+  .reports-box{
+    width: 560px;
+    padding: 48px 32px;
+    .reports-box-title{
+      text-align: center;
+      color: #333;
+      font-size: 32px;
+      line-height: 40px;
+      font-weight: bold;
+      margin-bottom: 32px;
+    }
+    .reports-item-box{
+      max-height: 476px;
+      overflow:auto;
+    }
+    .reports-item{
+      height: 84px;
+      background: rgba(33, 174, 195, .05);
+      border-radius: 1px;
+      display: flex;
+      align-items: center;
+      padding-left: 24px;
+      margin-bottom: 24px;
+      .reports-logo{
+        display: inline-block;
+        width: 32px;
+        height: 32px;
+        margin-right: 16px;
+        background-image: url("../assets/reports-logo.png");
+        background-size: 100% 100%;
+      }
+      .reports-name{
+        color: #21AEC3;
+        font-size: 28px;
       }
     }
   }

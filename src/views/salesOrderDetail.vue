@@ -256,14 +256,26 @@ export default {
       }else{//通过
         // if(){}
         console.log(this.materialList)
-        let isConfirm = false
+        let isConfirm = true
         for(let k of this.materialList){
           if(!k.barCode){
             isConfirm = false
           }
         }
         if(isConfirm){
-          this.submit(type)
+          this.$dialog.confirm({
+            title: '审核通过',
+            message: '确定通过审核吗？',
+            confirmButtonText: '确定',
+            confirmButtonColor: '#21AEC3'
+          })
+              .then(() => {
+                this.submit(type)
+              })
+              .catch(() => {
+              });
+
+          // this.submit(type)
         }else{
           this.$toast('没有填写条码！')
         }
@@ -277,6 +289,7 @@ export default {
         tubes:this.materialList,
         samplingTime:this.samplingTime
       }).then(res=>{
+        this.$toast('审核成功')
         history.go(-1)
       })
     }

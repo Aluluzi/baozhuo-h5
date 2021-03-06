@@ -3,7 +3,7 @@
     <p class="item-title van-ellipsis">{{ tradeName }}</p>
     <div class="item-material-box">
       <div v-for="(item,index) in tubes" :key="index">
-        <img v-lazy="item.tubeImg" alt="">
+        <img v-lazy="pdfURL + item.tubeImg" alt="">
         <span>x{{ item.tubeNum }}</span>
       </div>
     </div>
@@ -14,6 +14,8 @@
 <script>
 import defaultImg from "@/assets/defaultImg.png";
 import { mapState } from "vuex";
+import {pdfURL} from "@/config";
+
 export default {
   name: "TestItem",
   components: {},
@@ -36,6 +38,7 @@ export default {
   data() {
     return {
       defaultImg: defaultImg,
+      pdfURL:pdfURL,
     };
   },
   computed: {
@@ -84,11 +87,12 @@ export default {
     >div{
       display: flex;
       align-items: center;
-      margin-right: 10px;
+      margin-right: 20px;
       margin-bottom: 24px;
       >img{
         width: 80px;
         height: 80px;
+        margin-right: 20px;
       }
       >span{
         color: #333;

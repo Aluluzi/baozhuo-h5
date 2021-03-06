@@ -6,7 +6,7 @@
     </div>
     <div class="edit-box">
       <van-stepper v-model="list.num" input-width="60px" button-size="22px"/>
-      <input type="number" placeholder="请输入条码" v-model="list.code">
+      <input placeholder="请输入条码" v-model="list.code">
     </div>
   </div>
 </template>
