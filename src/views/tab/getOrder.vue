@@ -278,6 +278,7 @@ export default {
             background-size: 100% 100%;
             background-image: url("../../assets/btn-check.png");
             margin-right: 40px;
+            flex-shrink: 0;
           }
 
           .order-goods-item-check.active {

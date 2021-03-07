@@ -17,11 +17,11 @@
     </div>
     <div class="classify-list" ref="right_srcoll">
       <van-list
+          v-model="loading"
           :finished="finished"
           :finished-text="finishedText"
-          :immediate-check="false"
           @load="onLoad"
-          v-model="loading"
+
       >
         <div class="extension-item-box">
           <goods-item
@@ -104,11 +104,13 @@ export default {
           }
         })
         this.categoryList = [...arr]
+        this.categoryId = -1
         this.onLoad(-1)
       })
     },
     changeSidebar(id, index) {
       this.list = []
+      this.categoryId = id
       this.onLoad(id)
     },
     onLoad(id) {
@@ -117,10 +119,9 @@ export default {
         page: this.page,
         labId: this.labId,
         status: '1',
-        categoryId: id,
+        categoryId: this.categoryId,
       };
-
-      if (id < 0) {//收藏
+      if (this.categoryId < 0) {//收藏
         getFavoriteList({
           id:this.labId
         }).then(res => {
@@ -149,6 +150,8 @@ export default {
 
     setData(res){
       if (res.data.length > 0) {
+        this.loading = false;
+        this.finished = false;
         const arr = res.data.map(item => {
           let isCheck = false
           for(let k of this.checkList){
@@ -163,7 +166,8 @@ export default {
         })
         this.list = this.list.concat(arr)
 
-        const row = Math.ceil(res.total / this.page_size)
+        // const row = Math.ceil(res.total / this.page_size)
+        const row = res.totalPage;
         this.list.length === 0 ?
             (this.finishedText = "") :
             (this.finishedText = "没有更多了");
@@ -175,7 +179,7 @@ export default {
             this.nodata = true;
           }
         }
-        this.page_no++;
+        this.page++;
 
       } else {
         this.finishedText = ""
@@ -251,7 +255,7 @@ export default {
   /*width: 590px;*/
   width: calc(100% - 226px);
   //padding-bottom: 128px;
-  height: calc(100vh - 202px);
+  height: calc(100vh - 302px);
   overflow-y: scroll;
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
