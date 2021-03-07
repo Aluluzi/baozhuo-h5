@@ -39,7 +39,7 @@ export default {
   },
   computed: {},
   created() {
-    console.log(this.list)
+    this.barCode = this.list.code
   },
   mounted() {
   },

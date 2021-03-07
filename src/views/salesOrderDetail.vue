@@ -91,6 +91,9 @@ export default {
       payPrice: 0,
       doctorName: '',
 
+      orderListRequestUrl:baseURL+'/api/trade/',
+      // orderListRequestUrl:'http://localhost:8080/apis/api/trade/',
+
     }
   },
   computed: {
@@ -142,7 +145,7 @@ export default {
     getData() {
       const _this = this;
       this.$http
-          .post(baseURL + '/api/trade/' + this.id, {header: 'token'})
+          .post(this.orderListRequestUrl + this.id, {header: 'token'})
           .then(function (res) {
             if (res.data.code === 200) {
               const datas = res.data.data

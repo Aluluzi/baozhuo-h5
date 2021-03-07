@@ -21,7 +21,6 @@
           :finished="finished"
           :finished-text="finishedText"
           @load="onLoad"
-
       >
         <div class="extension-item-box">
           <goods-item
@@ -57,7 +56,7 @@ export default {
       // }],
       categoryList: [],
 
-      finished: false,
+      finished: true,
       finishedText: "",
       nodata: false,
       loading: false,
@@ -66,7 +65,7 @@ export default {
 
       page: 1,
       page_size: 10,
-      categoryId: null,
+      categoryId: -1,
       activeKey: 0,
       checkList:[],
       // cartList:[],
@@ -104,16 +103,21 @@ export default {
           }
         })
         this.categoryList = [...arr]
-        this.categoryId = -1
-        this.onLoad(-1)
+        // this.onLoad()
       })
     },
     changeSidebar(id, index) {
       this.list = []
       this.categoryId = id
-      this.onLoad(id)
+      this.page = 1
+      this.finishedText = ""
+      this.loading = false;
+      this.finished = true;
+
+
+      this.onLoad()
     },
-    onLoad(id) {
+    onLoad() {
       let params = {
         size: this.page_size,
         page: this.page,

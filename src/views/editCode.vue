@@ -58,6 +58,8 @@ export default {
           code: item.barCode
         }
       })
+      console.log('editcode',materialList)
+      console.log(this.list)
     }
   },
   mounted() {
@@ -67,7 +69,6 @@ export default {
   methods: {
     next() {
       const {type} = this.$route.query
-      console.log(this.list)
       this.$store.dispatch("saveTubesList", this.list);
       this.$router.push({
         path: '/editInfo',
