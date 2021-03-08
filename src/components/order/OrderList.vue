@@ -6,6 +6,7 @@
             v-model="loading"
             :finished="finished"
             :finished-text="finishedText"
+            @load="onLoad"
         >
           <div>
             <order-item
@@ -39,7 +40,7 @@ export default {
       size: 10,
       list: [],
       loading: false,
-      finished: false,
+      finished: true,
       finishedText: "",
       nodata: false,
 
@@ -95,6 +96,7 @@ export default {
     onRefresh: Debounce(function () {
       this.$nextTick(() => {
         this.isLoading = false;
+        // this.finished = true;
 
         const obj = this.params
         if(obj.createdFrom) {
@@ -109,6 +111,7 @@ export default {
         }
         if(!obj.settleMethod) delete obj.settleMethod;
 
+        this.reset();
         this.onLoad(obj)
       });
     }, 300),
@@ -133,8 +136,11 @@ export default {
         if (res.data.length>0) {
           // 加载状态结束
           this.loading = false;
+          this.finished = false;
+
           this.list = this.list.concat(res.data);
-          let row = Math.ceil(res.total / this.size);
+          // let row = Math.ceil(res.total / this.size);
+          const row = res.totalPage;
           this.list.length === 0
             ? (this.finishedText = "")
             : (this.finishedText = "没有更多了");
@@ -147,6 +153,7 @@ export default {
           }
           this.page++;
         } else {
+          this.finishedText = "";
           this.loading = false;
           this.finished = true;
         }
@@ -157,7 +164,7 @@ export default {
       this.page = 1;
       this.size = 10;
       this.loading = false;
-      this.finished = false;
+      this.finished = true;
       this.finishedText = '';
       this.nodata = false;
     },
