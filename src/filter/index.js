@@ -25,29 +25,71 @@ Vue.filter("formatMoblie", function(val) {
   return val;
 });
 
-Vue.filter("userStatus", function(status) {
-  let txt = "";
+Vue.filter("orderStatus_name", function(status) {
+  let val = '-'
   switch (status) {
-    case -1:
-      txt = "已禁用";
-      break;
     case 0:
-      txt = "用户未注册";
+      val = '已关闭'
       break;
-    case 1:
-      txt = "审核中";
+    case 10:
+      val = '待付款'
       break;
-    case 2:
-      txt = "审核已通过";
+    case 20:
+      val = '未审核'
       break;
-    case 3:
-      txt = "审核未通过";
+    case 30:
+      val = '审核拒绝'
+      break;
+    case 40:
+      val = '报告未出'
+      break;
+    case 45:
+      val = '部分报告已出'
+      break;
+    case 50:
+      val = '订单取消'
+      break;
+    case 60:
+      val = '报告已出'
       break;
     default:
-      txt = "用户未注册";
+      val = ' - '
       break;
   }
-  return txt;
+  return val;
+});
+Vue.filter("orderStatus_className", function(status) {
+  let val = '-'
+  switch (status) {
+    case 0:
+      val = 'order-status-qx'
+      break;
+    case 10:
+      val = 'order-status-dfk'
+      break;
+    case 20:
+      val = 'order-status-wsh'
+      break;
+    case 30:
+      val = 'order-status-jj'
+      break;
+    case 40:
+      val = 'order-status-bbwc'
+      break;
+    case 45:
+      val = 'order-status-bbyc'
+      break;
+    case 50:
+      val = 'order-status-qx'
+      break;
+    case 60:
+      val = 'order-status-bgyc'
+      break;
+    default:
+      val = 'order-status-qx'
+      break;
+  }
+  return val;
 });
 Vue.filter("sexStatus", function(val) {
   switch (val) {

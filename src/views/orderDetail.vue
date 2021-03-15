@@ -5,7 +5,7 @@
     <div class="order-content">
       <!--订单信息-->
       <div class="order-info">
-        <p class="order-info-status" :class="status.className">{{ status.statusName }} <span class="checkReports_title" v-if="reports.length>0" @click="openReportsBox">查看报告</span>  </p>
+        <p class="order-info-status" :class="status_id | orderStatus_className">{{ status_id | orderStatus_name }} <span class="checkReports_title" v-if="reports.length>0" @click="openReportsBox">查看报告</span>  </p>
         <p class="order-info-sn">
           <span>订单编号：{{ orderId }}</span>
           <span>{{ labName }}</span>
@@ -64,9 +64,17 @@
             <p class="reports-box-title">检测报告</p>
 
             <div class="reports-item-box">
-              <div class="reports-item" @click="checkReport(item)" v-for="(item,index) in reports" :key="index">
-                <i class="reports-logo"></i>
-                <span class="reports-name">查看报告{{ +index+1 }}</span>
+              <div class="reports-items"   v-for="(item,index) in reports" :key="index">
+                <div class="reports-item check" @click="checkReport(item)">
+<!--                  <i class="reports-logo"></i>-->
+                  <van-icon name="description" />
+                  <span class="reports-name">查看报告{{ +index+1 }}</span>
+                </div>
+                <div class="reports-item load" @click="loadReport(item)" v-if="isAndroid">
+<!--                  <i class="reports-logo"></i>-->
+                  <van-icon name="down" />
+                  <span class="reports-name">下载报告{{ +index+1 }}</span>
+                </div>
               </div>
             </div>
           </div>
@@ -120,8 +128,10 @@ export default {
       doc_name: '',
       orderListRequestUrl:baseURL+'/api/trade/',
       // orderListRequestUrl:'http://localhost:8080/apis/api/trade/',
-
+      //
       isShowReports: false,
+
+      isAndroid:false,
     }
   },
   computed: {
@@ -144,6 +154,14 @@ export default {
       this.$toast("数据加载错误，请稍后重试");
     }
 
+    if (navigator.userAgent.match(/(iPhone|iPod|iPad);?/i)) {
+      //ios
+      this.isAndroid = false
+    } else {
+      //android
+      this.isAndroid = true
+    }
+
   },
   mounted() {
   },
@@ -159,7 +177,7 @@ export default {
             if (res.data.code === 200) {
               const datas = res.data.data
               _this.status_id = datas.status
-              _this.status = _this.formatStatus(datas.status)
+              // _this.status = _this.formatStatus(datas.status)
               _this.orderId = datas.id
               _this.labName = datas.labName
               _this.payPrice = datas.payAmount
@@ -187,44 +205,44 @@ export default {
             _this.$toast(res.data.message);
           });
     },
-    formatStatus(status) {
-      let obj = {}
-      switch (status) {
-        case 0:
-          obj.className = 'order-info-status-qx'
-          obj.statusName = '已关闭'
-          break;
-        case 10:
-          obj.className = 'order-info-status-dfk'
-          obj.statusName = '待付款'
-          break;
-        case 20:
-          obj.className = 'order-info-status-wsh'
-          obj.statusName = '未审核'
-          break;
-        case 30:
-          obj.className = 'order-info-status-jj'
-          obj.statusName = '审核拒绝'
-          break;
-        case 40:
-          obj.className = 'order-info-status-bbwc'
-          obj.statusName = '报告未出'
-          break;
-        case 50:
-          obj.className = 'order-info-status-qx'
-          obj.statusName = '订单取消'
-          break;
-        case 60:
-          obj.className = 'order-info-status-bgyc'
-          obj.statusName = '报告已出'
-          break;
-          default:
-            obj.className = 'order-info-status-qx'
-            obj.statusName = ' - '
-            break;
-      }
-      return obj;
-    },
+    // formatStatus(status) {
+    //   let obj = {}
+    //   switch (status) {
+    //     case 0:
+    //       obj.className = 'order-info-status-qx'
+    //       obj.statusName = '已关闭'
+    //       break;
+    //     case 10:
+    //       obj.className = 'order-info-status-dfk'
+    //       obj.statusName = '待付款'
+    //       break;
+    //     case 20:
+    //       obj.className = 'order-info-status-wsh'
+    //       obj.statusName = '未审核'
+    //       break;
+    //     case 30:
+    //       obj.className = 'order-info-status-jj'
+    //       obj.statusName = '审核拒绝'
+    //       break;
+    //     case 40:
+    //       obj.className = 'order-info-status-bbwc'
+    //       obj.statusName = '报告未出'
+    //       break;
+    //     case 50:
+    //       obj.className = 'order-info-status-qx'
+    //       obj.statusName = '订单取消'
+    //       break;
+    //     case 60:
+    //       obj.className = 'order-info-status-bgyc'
+    //       obj.statusName = '报告已出'
+    //       break;
+    //       default:
+    //         obj.className = 'order-info-status-qx'
+    //         obj.statusName = ' - '
+    //         break;
+    //   }
+    //   return obj;
+    // },
     _cancel() {
       tradeCancel({
         id: this.id
@@ -306,19 +324,42 @@ export default {
 
     },
     checkReport(url) {
-      if (navigator.userAgent.match(/(iPhone|iPod|iPad);?/i)) {
-        //ios
-        window.location.href = pdfURL + url;
-      } else {
-        //android
+      // window.location.href = pdfURL + url;
+
+      if(this.isAndroid){
+        //Android
         this.$router.push({
           path: "/EinvoiceDetail",
           query: {
-            invoice_uri: '/preview/'+url,
+            invoice_uri: url,
           },
         });
+      }else{
+        //ios
+        window.location.href = pdfURL + url
       }
+      // if (navigator.userAgent.match(/(iPhone|iPod|iPad);?/i)) {
+      //   //ios
+      //   window.location.href = pdfURL + url;
+      // } else {
+      //   //android
+      //   this.$router.push({
+      //     path: "/EinvoiceDetail",
+      //     query: {
+      //       invoice_uri: '/preview/'+url,
+      //     },
+      //   });
+      // }
 
+    },
+    loadReport(url){
+      window.location.href = pdfURL + url
+        // this.$router.push({
+        //   path: "/EinvoiceDetail",
+        //   query: {
+        //     invoice_uri: url,
+        //   },
+        // });
     }
   },
 };
@@ -371,30 +412,6 @@ export default {
         margin-left: 16px;
         text-decoration: underline;
       }
-    }
-
-    .order-info-status-dfk {
-      color: #FE9838;
-    }
-
-    .order-info-status-wsh {
-      color: #ADB6BA;
-    }
-
-    .order-info-status-qx {
-      color: #919EAB;
-    }
-
-    .order-info-status-jj {
-      color: #ED5353;
-    }
-
-    .order-info-status-bgwc {
-      color: #3858E6;
-    }
-
-    .order-info-status-bgyc {
-      color: #1DAEC3;
     }
 
     .order-info-sn {
@@ -499,15 +516,40 @@ export default {
     .reports-item-box{
       max-height: 476px;
       overflow:auto;
+      .reports-items{
+        display: flex;
+        align-items: center;
+        .check{
+          background: rgba(33, 174, 195, .05);
+          .reports-name{
+            color: #21AEC3;
+          }
+          i{
+            color: #21AEC3;
+          }
+        }
+        .load{
+          margin-left: 15px;
+          background: rgba(254, 152, 56, 0.1);
+          .reports-name{
+            color: #FE9838;
+          }
+          i{
+            color: #FE9838;
+          }
+        }
+      }
     }
     .reports-item{
       height: 84px;
-      background: rgba(33, 174, 195, .05);
+      //background: rgba(33, 174, 195, .05);
       border-radius: 1px;
       display: flex;
       align-items: center;
       padding-left: 24px;
       margin-bottom: 24px;
+      flex: 1;
+
       .reports-logo{
         display: inline-block;
         width: 32px;
@@ -517,7 +559,10 @@ export default {
         background-size: 100% 100%;
       }
       .reports-name{
-        color: #21AEC3;
+        font-size: 28px;
+        margin-left: 10px;
+      }
+      i{
         font-size: 28px;
       }
     }

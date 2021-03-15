@@ -40,17 +40,31 @@ export default {
     }),
   },
   created() {
-    const discount = scaleNum(this.tokenInfo.user.clinic.discount, -2)
+    // const discount = scaleNum(this.tokenInfo.user.clinic.discount, -2)
     const {orderList} = this.$route.params
+    let {discount, id} = this.tokenInfo.user.clinic
+    discount = scaleNum(discount, -2)
 
-    let price = 0
+    let price = 0, payPrice = 0
     for (let k of orderList) {
       price += k.price
+      if (k.isPromotion) {//是特殊商品
+        const p = this.getPromotionPrice(id, k.Promotions, k.price)
+        // price += p
+        payPrice += p
+      } else {//不是特殊商品
+        // price += k.price
+        payPrice += this.getDiscountPrice(k.price, discount)
+      }
     }
 
+    // this.price = (scaleNum(price, -2)).toFixed(2);//精度计算
+    // this.payPrice = (scaleNum(scaleNum(this.price, 2) * discount, -2)).toFixed(2);//精度计算
+    // this.discountPrice = scaleNum((scaleNum(this.price, 2) - scaleNum(this.payPrice, 2)), -2)//精度计算
+
     this.price = (scaleNum(price, -2)).toFixed(2);//精度计算
-    this.payPrice = (scaleNum(scaleNum(this.price, 2) * discount, -2)).toFixed(2);//精度计算
-    this.discountPrice = scaleNum((scaleNum(this.price, 2) - scaleNum(this.payPrice, 2)), -2)//精度计算
+    this.payPrice = (scaleNum(payPrice,-2)).toFixed(2);//精度计算
+    this.discountPrice = (scaleNum((price - payPrice), -2)).toFixed(2);//精度计算
 
   },
   mounted() {
@@ -128,7 +142,7 @@ export default {
 
     }, 300),
 
-    wxPay(res){
+    wxPay(res) {
       wx.chooseWXPay({
         appId: res.appId,
         timeStamp: res.timeStamp, // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
@@ -147,12 +161,12 @@ export default {
         }
       });
     },
-    authorize(params){
+    authorize(params) {
       const redirect_uri = window.location.href.split('#')[0]
       weChatGetTicked({
-        url:redirect_uri
-      }).then(res=>{
-        const {appId,timestamp,noncestr,signature} = res
+        url: redirect_uri
+      }).then(res => {
+        const {appId, timestamp, noncestr, signature} = res
         wx.config({
           debug: false,
           appId: appId,
@@ -176,10 +190,10 @@ export default {
                 paySign: params.paySign, // 支付签名
                 success: function () {
                   // this.$router.replace('/order')
-                  let backNum=history.length-1;
+                  let backNum = history.length - 1;
                   history.go(-backNum);
                 },
-                cancel:function(res){
+                cancel: function (res) {
                   this.$toast('您取消了支付')
                 }
               });
@@ -190,6 +204,18 @@ export default {
           })
         })
       })
+    },
+
+    getPromotionPrice(id, arr, oldPrice = 0) {//诊所id,遍历的数组,原价
+      for (let k of arr) {
+        if (id === k.clinicId) {
+          return k.price
+        }
+      }
+      return oldPrice
+    },
+    getDiscountPrice(oldPrice = 0, discount) {
+      return oldPrice * discount
     },
   }
 }

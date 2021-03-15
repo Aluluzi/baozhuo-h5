@@ -248,6 +248,10 @@ a {
     transform: translateY(-50%);
     content: "";
   }
+  .van-search{
+    padding-top: 0;
+    flex: 1;
+  }
 }
 
 //tab页
@@ -359,10 +363,40 @@ a {
   .van-tab--active{
     border: 1px solid #21AEC3!important;
   }
+  .van-search{
+    padding: 0;
+    flex: 1;
+  }
 }
 
 .materialItem{
   .scanLogo{
     color: #21AEC3;
   }
+}
+
+
+/*订单类型公共颜色类型*/
+.order-status-dfk {
+  color: #FE9838;
+}
+
+.order-status-wsh {
+  color: #ADB6BA;
+}
+
+.order-status-qx {
+  color: #919EAB;
+}
+
+.order-status-jj {
+  color: #ED5353;
+}
+
+.order-status-bgwc {
+  color: #3858E6;
+}
+
+.order-status-bgyc {
+  color: #1DAEC3;
 }

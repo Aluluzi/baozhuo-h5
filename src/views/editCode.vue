@@ -87,17 +87,17 @@ export default {
             j = i;
           }
         }
-        arr[i].num = 0;
+        arr[i].num = 1;
         hash.push(arr[i]);
       }
-      // 第二步，统计重复个数
-      hash.forEach(item => {
-        arr.forEach(dd => {
-          if (item.id === dd.id) {
-            item.num++
-          }
-        })
-      });
+      // // 第二步，统计重复个数
+      // hash.forEach(item => {
+      //   arr.forEach(dd => {
+      //     if (item.id === dd.id) {
+      //       item.num++
+      //     }
+      //   })
+      // });
       return hash;
     },
     save() {

@@ -47,7 +47,7 @@ export default {
   components: {
     GoodsItem
   },
-  props: ['labId', 'orderGoodsList'],
+  props: ['labId', 'orderGoodsList','name'],
   data() {
     return {
       // categoryList: [{
@@ -69,11 +69,27 @@ export default {
       activeKey: 0,
       checkList:[],
       // cartList:[],
+
+      type:2,//1搜索，2收藏，3类目
     }
   },
   watch:{
     orderGoodsList(val){
       this.checkList = val
+    },
+    name(val){
+      if(val){
+        this.activeKey = -1
+        this.type = 1
+
+        this.list = []
+        this.page = 1
+        this.finishedText = ""
+        this.loading = false;
+        this.finished = true;
+
+        this.onLoad()
+      }
     }
   },
   computed: {
@@ -103,7 +119,7 @@ export default {
           }
         })
         this.categoryList = [...arr]
-        // this.onLoad()
+        this.onLoad()
       })
     },
     changeSidebar(id, index) {
@@ -114,7 +130,13 @@ export default {
       this.loading = false;
       this.finished = true;
 
+      if(id<0){//当前是收藏
+        this.type = 2
+      }else{
+        this.type = 3
+      }
 
+      this.$emit('_clear')
       this.onLoad()
     },
     onLoad() {
@@ -125,7 +147,7 @@ export default {
         status: '1',
         categoryId: this.categoryId,
       };
-      if (this.categoryId < 0) {//收藏
+      if (this.type == 2) {//收藏
         getFavoriteList({
           id:this.labId
         }).then(res => {
@@ -145,6 +167,11 @@ export default {
           this.list = arr
         })
       } else {
+        if(this.type == 1){
+          params.name = this.name
+
+          delete params.categoryId
+        }
         getInspectionItemList(params).then(res => {
           this.setData(res)
         })
@@ -244,7 +271,7 @@ export default {
 
 .classify-sidebar {
   min-width: 226px;
-  height: calc(100vh - 350px);
+  height: calc(100vh - 450px);
   overflow-y: scroll;
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
@@ -259,7 +286,7 @@ export default {
   /*width: 590px;*/
   width: calc(100% - 226px);
   //padding-bottom: 128px;
-  height: calc(100vh - 302px);
+  height: calc(100vh - 402px);
   overflow-y: scroll;
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;

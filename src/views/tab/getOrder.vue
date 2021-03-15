@@ -11,7 +11,11 @@
         @change="chooseLab"
     >
       <van-tab :title="x.name" v-for="(x,index) in tab_list" :key="index" >
-        <labList :labId="x.id" :orderGoodsList="orderGoodsList" @check="_check"/>
+        <van-search v-model="search" placeholder="请输入搜索关键词"
+                    @search="onSearch"
+                    @cancel="onCancel"
+                    @clear="onClear"/>
+        <labList :labId="x.id" :name="searchValue" :orderGoodsList="orderGoodsList" @check="_check" @_clear="_clear"/>
       </van-tab>
     </van-tabs>
 
@@ -74,7 +78,10 @@ export default {
 
 
       show: false,
-      orderGoodsList: []
+      orderGoodsList: [],
+
+      search:'',
+      searchValue:''
     };
   },
   components: {
@@ -130,6 +137,10 @@ export default {
         this.orderGoodsList = data.checkList
       }
     },
+    _clear(){
+      this.searchValue = ''
+      this.search = ''
+    },
     setCheck(item,index){
       item.isCheck=!item.isCheck
       this.orderGoodsList.splice(index,1)
@@ -142,6 +153,17 @@ export default {
           type:1//1医生下单，2业务员编辑
         }
       })
+    },
+    onSearch(){
+      this.searchValue = this.search
+      console.log(this.searchValue)
+    },
+    onCancel(){
+      console.log('取消了')
+    },
+    onClear(){
+      this.searchValue = ''
+      console.log('onClear')
     }
   },
 };

@@ -17,7 +17,7 @@
       :id="data.id"
     ></test-item>
     <div class="order-btn-box">
-      <p class="text" v-if="roleType===4">{{ data.samplingTime }}</p>
+      <p class="text" v-if="roleType===4|| roleType===3">{{ data.samplingTime }}</p>
       <p class="clinicinfo" v-if="roleType===2">{{ data.doctorName }}({{ data.clinicName }})</p>
       <p class="order-total">
         合计：
@@ -87,6 +87,10 @@ export default {
           case 40:
             obj.className = 'order-tips-bbwc'
             obj.statusName = '报告未出'
+            break;
+          case 45:
+            obj.className = 'order-tips-bbwc'
+            obj.statusName = '部分报告已出'
             break;
           case 50:
             obj.className = 'order-tips-qx'

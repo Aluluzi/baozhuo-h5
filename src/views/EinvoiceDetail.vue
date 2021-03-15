@@ -5,16 +5,20 @@
 
     <div v-else>
       <div class="content" >
-        <span>{{ invoice_uri }}</span>
+<!--        <span>{{ check_uri }}</span>-->
         <p>暂不支持安卓手机在线阅读pdf,请复制链接到本地浏览器打开</p>
+<!--        <p>请复制链接到浏览器下载PDF报告</p>-->
       </div>
       <div class="btn-box">
         <FootBtn text="复制链接"
                  :disabled="false"
                  data-clipboard-action="copy"
                  class="cobyOrderSn"
-                 :data-clipboard-text="invoice_uri"
+                 :data-clipboard-text="check_uri"
                  @click_btn="copyLink"/>
+
+<!--        <FootBtnTwo v-if="status_id===10" left_text="取消订单" right_text="前往支付" @click_left_btn="_cancel"-->
+<!--                    @click_right_btn="_pay"/>-->
       </div>
     </div>
 
@@ -24,6 +28,7 @@
 import Clipboard from "clipboard"; //复制
 import FootBtn from "@/components/Footbtn.vue";
 import Pdfh5 from "pdfh5";
+import {load_pdfURL, pdfURL} from "@/config";
 
 export default {
   name: "EinvoiceDetail",
@@ -40,20 +45,23 @@ export default {
   },
   data() {
     return {
-      invoice_uri: "",
+      check_uri: "",
+      load_uri: "",
 
       Pdfh5:null,
       isShowPdf:true,
     };
   },
   created() {
-    this.invoice_uri = this.$route.query.invoice_uri;
+    const {invoice_uri} = this.$route.query
+    this.check_uri = pdfURL + invoice_uri;
+    this.load_uri = load_pdfURL + invoice_uri
   },
   mounted() {
 
-    //实例化
+    // 实例化
     this.pdfh5 = new Pdfh5("#pdf-box", {
-      pdfurl: this.invoice_uri
+      pdfurl: this.load_uri
     });
     //监听完成事件
     this.pdfh5.on("complete", function (status, msg, time) {

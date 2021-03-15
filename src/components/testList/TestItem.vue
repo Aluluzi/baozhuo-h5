@@ -1,13 +1,13 @@
 <template>
   <div class="TestItem" @click="link(id)">
-    <p class="item-title van-ellipsis">{{ tradeName }}</p>
+    <p class="item-user-info">{{ patient.name }}/{{ patient.sex==='M'?'男':'女' }}/{{ patient.age }}岁</p>
     <div class="item-material-box">
       <div v-for="(item,index) in tubes" :key="index">
         <img v-lazy="pdfURL + item.tubeImg" alt="">
         <span>x{{ item.tubeNum }}</span>
       </div>
     </div>
-    <p class="item-user-info">{{ patient.name }}/{{ patient.sex==='M'?'男':'女' }}/{{ patient.age }}岁</p>
+    <p class="item-title van-ellipsis">{{ tradeName }}</p>
   </div>
 </template>
 
@@ -76,9 +76,7 @@ export default {
 
   .item-title{
     color: #333;
-    font-size: 40px;
-    margin-bottom: 40px;
-    font-weight: bold;
+    font-size: 28px;
   }
   .item-material-box{
     display: flex;
@@ -102,7 +100,9 @@ export default {
   }
   .item-user-info{
     color: #333;
-    font-size: 28px;
+    font-size: 40px;
+    margin-bottom: 40px;
+    font-weight: bold;
   }
 
 }

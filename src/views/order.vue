@@ -3,29 +3,38 @@
 
     <div class="order-search-box">
       <div class="order-search-time-box">
+        <van-search v-model="patientKey" placeholder="请输入病人姓名/手机号"/>
+        <div class="order-search-time-btn" @click="search">搜索</div>
+        <div class="order-search-time-btn reset" @click="reset">重置</div>
+      </div>
+      <div class="order-search-time-box">
         <div class="order-search-time">
           <i></i>
-          <input class="order-search-title active" placeholder="请选择开始时间" v-model="start_time"
+          <input class="order-search-title van-ellipsis active" placeholder="开始时间" v-model="start_time"
                  @click="chooseTime('start_time')" readonly>
           <span class="order-search-txt">至</span>
-          <input class="order-search-title active" placeholder="请选择结束时间" v-model="end_time"
+          <input class="order-search-title van-ellipsis active" placeholder="结束时间" v-model="end_time"
                  @click="chooseTime('end_time')" readonly>
-
         </div>
-        <div class="order-search-time-btn" @click="time_reset">重置</div>
-      </div>
-      <div class="order-search-type-box">
-        <div v-for="(item,index) in tab_list" :key="index" :class="status===item.status?'active':''"
-             @click="chooseType(item.status)">{{ item.title }}
+        <div class="status-box" @click="isShowPickerStatus = true">
+          <span class="van-ellipsis">{{ status.value }}</span>
+          <i></i>
         </div>
       </div>
+      <!--      <div class="order-search-type-box">-->
+      <!--        <div v-for="(item,index) in tab_list" :key="index" :class="status===item.status?'active':''"-->
+      <!--             @click="chooseType(item.status)">{{ item.title }}-->
+      <!--        </div>-->
+      <!--      </div>-->
       <div class="order-search-type-box" v-if="roleType==2">
         <div v-for="(item,index) in settleMethod_list" :key="index" :class="settleMethodType===item.value?'active':''"
              @click="chooseSettleMethod(item.value)">{{ item.title }}
         </div>
       </div>
     </div>
+
     <OrderList :params="params" @getTotalAmount="_getTotalAmount"/>
+
     <div class="order-total-box" v-show="isShowTotalPrice">
       <p class="order-total">
         该时间订单合计金额：
@@ -40,6 +49,16 @@
           v-model="currentDate"
           type="date"
           @cancel="showPicker = false"
+      />
+    </van-popup>
+
+    <van-popup v-model="isShowPickerStatus" round position="bottom">
+      <van-picker
+          show-toolbar
+          value-key="value"
+          :columns="tab_list"
+          @cancel="isShowPickerStatus = false"
+          @confirm="statusIsConfirm"
       />
     </van-popup>
   </div>
@@ -59,7 +78,7 @@ export default {
   data() {
     return {
 
-      status: "",//状态
+      // status: "",//状态
       settleMethodType: "",//日结月结
       isReset: false,
 
@@ -69,28 +88,34 @@ export default {
       start_time: '',
       end_time: '',
       type: '',
+      patientKey: '',
       params: {},//查询参数
-      totalAmount:0
+      totalAmount: 0,
+      isShowPickerStatus: false,
+      status: {
+        value: '全部',
+        key: "",
+      }
     };
   },
   watch: {
-    status(val) {
-      this.params = {
-        status: val,
-        createdFrom: this.start_time,
-        createdEnd: this.end_time,
-        settleMethod: this.settleMethodType
-      }
-    },
+    // status(val) {
+    //   this.params = {
+    //     status: val,
+    //     createdFrom: this.start_time,
+    //     createdEnd: this.end_time,
+    //     settleMethod: this.settleMethodType
+    //   }
+    // },
     start_time(val) {
       if (val && this.end_time) {
         if (new Date(val) < new Date(this.end_time)) {
-          this.params = {
-            status: this.status,
-            createdFrom: val,
-            createdEnd: this.end_time,
-            settleMethod: this.settleMethodType
-          }
+          // this.params = {
+          //   status: this.status,
+          //   createdFrom: val,
+          //   createdEnd: this.end_time,
+          //   settleMethod: this.settleMethodType
+          // }
         } else {
           this.start_time = ''
           this.end_time = ''
@@ -101,12 +126,12 @@ export default {
     end_time(val) {
       if (val && this.start_time) {
         if (new Date(val) > new Date(this.start_time)) {
-          this.params = {
-            status: this.status,
-            createdFrom: this.start_time,
-            createdEnd: val,
-            settleMethod: this.settleMethodType
-          }
+          // this.params = {
+          //   status: this.status,
+          //   createdFrom: this.start_time,
+          //   createdEnd: val,
+          //   settleMethod: this.settleMethodType
+          // }
         } else {
           this.start_time = ''
           this.end_time = ''
@@ -114,23 +139,23 @@ export default {
         }
       }
     },
-    settleMethodType(val) {
-      this.params = {
-        status: this.status,
-        createdFrom: this.start_time,
-        createdEnd: this.end_time,
-        settleMethod: val
-      }
-    },
-    isReset(val){
-      if(val){
-        this.params = {
-          status: this.status,
-          settleMethod: this.settleMethodType
-        }
-        this.isReset = false
-      }
-    }
+    // settleMethodType(val) {
+    //   this.params = {
+    //     status: this.status,
+    //     createdFrom: this.start_time,
+    //     createdEnd: this.end_time,
+    //     settleMethod: val
+    //   }
+    // },
+    // isReset(val){
+    //   if(val){
+    //     this.params = {
+    //       status: this.status,
+    //       settleMethod: this.settleMethodType
+    //     }
+    //     this.isReset = false
+    //   }
+    // }
   },
   computed: {
     ...mapState({
@@ -147,33 +172,38 @@ export default {
     tab_list() {
       let arr = [
         {
-          title: "全部",
-          status: "",
+          value: "全部",
+          key: "",
         },
         {
-          title: "未审核",
-          status: '20',
+          value: "未审核",
+          key: '20',
         },
         {
-          title: "待付款",
-          status: '10',
+          value: "待付款",
+          key: '10',
         },
         {
-          title: "订单取消",
-          status: '50',
+          value: "订单取消",
+          key: '50',
         },
         {
-          title: "审核拒绝",
-          status: '30',
+          value: "审核拒绝",
+          key: '30',
         },
         {
-          title: "报告未出",
-          status: '40',
+          value: "报告未出",
+          key: '40',
         },
         {
-          title: "报告已出",
-          status: '60',
+          value: "部分报告已出",
+          key: '45',
         },
+        {
+          value: "报告已出",
+          key: '60',
+        },
+
       ]
       if (this.roleType === 2) {
         arr.splice(1, 3)
@@ -181,10 +211,10 @@ export default {
       return arr
     },
 
-    isShowTotalPrice(){
-      if(this.start_time&&this.end_time){
+    isShowTotalPrice() {
+      if (this.start_time && this.end_time) {
         return true
-      }else{
+      } else {
         return false
       }
     }
@@ -209,21 +239,53 @@ export default {
       this.type = type
       this.showPicker = true
     },
-    time_reset() {
-      this.currentDate = new Date();
-      this.start_time = ''
-      this.end_time = ''
-      this.type = ''
-      this.isReset = true
-    },
-    chooseType(type) {
-      this.status = type
-    },
+    // time_reset() {
+    //   this.currentDate = new Date();
+    //   this.start_time = ''
+    //   this.end_time = ''
+    //   this.type = ''
+    //   this.isReset = true
+    // },
+    // chooseType(type) {
+    //   this.status = type
+    // },
     chooseSettleMethod(type) {
       this.settleMethodType = type
     },
-    _getTotalAmount(price){
+    _getTotalAmount(price) {
       this.totalAmount = price
+    },
+    statusIsConfirm(value) {
+      this.status = value
+      this.isShowPickerStatus = false
+    },
+    search() {
+      this.params = {
+        status: this.status.key,
+        createdFrom: this.start_time,
+        createdEnd: this.end_time,
+        patientKey:this.patientKey,
+        settleMethod: this.settleMethodType
+      }
+      console.log('search')
+    },
+    reset() {
+      this.currentDate = new Date();
+      this.start_time = ''
+      this.end_time = ''
+      this.status = {
+        value: '全部',
+        key: "",
+      }
+      this.patientKey = ''
+
+      this.params = {
+        status: '',
+        createdFrom: "",
+        createdEnd: "",
+        patientKey:'',
+        settleMethod: "",
+      }
     }
   },
 };
@@ -238,8 +300,12 @@ export default {
     display: flex;
     align-items: center;
 
+    &:first-child {
+      margin-bottom: 24px;
+    }
+
     .order-search-time {
-      width: 550px;
+      width: 449px;
       height: 68px;
       background: #F7F8FA;
       border-radius: 8px;
@@ -255,13 +321,13 @@ export default {
         background-image: url("../assets/tine-search.png");
         background-size: 100% 100%;
         margin-right: 16px;
-        flex-shrink:0;
+        flex-shrink: 0;
       }
 
       .order-search-title {
         color: #1DAEC3;
         font-size: 28px;
-        width: 200px;
+        width: 150px;
         line-height: 32px;
         margin-right: 16px;
         border: none;
@@ -293,15 +359,48 @@ export default {
     }
 
     .order-search-time-btn {
-      width: 120px;
+      width: 100px;
       height: 68px;
-      background: #FFFFFF;
+      background: #1DAEC3;
       border-radius: 8px;
-      border: 1px solid #1DAEC3;
+      //border: 1px solid #1DAEC3;
       text-align: center;
       line-height: 70px;
       box-sizing: border-box;
+      color: #fff;
+      font-size: 28px;
+      margin-left: 12px;
+    }
+    .order-search-time-btn.reset{
       color: #1DAEC3;
+      border: 1px solid #1DAEC3;
+      background: #fff;
+    }
+
+    .status-box {
+      width: 221px;
+      height: 68px;
+      border-radius: 8px;
+      background-color: #F7F8FA;
+      display: flex;
+      align-items: center;
+      padding: 14px 20px;
+      box-sizing: border-box;
+
+      > span {
+        color: #1DAEC3;
+        font-size: 28px;
+        line-height: 36px;
+        flex: 1;
+      }
+
+      > i {
+        flex-shrink: 0;
+        width: 24px;
+        height: 24px;
+        background-size: 100% 100%;
+        background-image: url("../assets/xiala.png");
+      }
     }
   }
 
@@ -312,12 +411,12 @@ export default {
     > div {
       background: #F7F8FA;
       border-radius: 8px;
-      padding: 17px 32px 15px 32px;
+      padding: 12px 15px 10px 15px;
       color: #919EAB;
       font-size: 28px;
       text-align: center;
-      margin-top: 24px;
-      margin-right: 20px;
+      margin-top: 12px;
+      margin-right: 12px;
     }
 
     > div.active {

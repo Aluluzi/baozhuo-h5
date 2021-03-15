@@ -91,7 +91,7 @@ name: "login",
       }
       >input{
         display: inline-block;
-        height: 32px;
+        height: 100%;
         width: 100%;
         color: #333;
         border: none;
